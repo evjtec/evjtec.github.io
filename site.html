@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Eshan Jacob — Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Courier+Prime:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    /* ── Design tokens ─────────────────────────────── */
+    :root {
+      --ink:       #0d0c0b;
+      --paper:     #f4f1ec;
+      --silver:    #9a9490;
+      --shadow:    #c8c3bc;
+      --rule:      #d4cfc9;
+      --serif:     'Playfair Display', Georgia, serif;
+      --mono:      'Courier Prime', 'Courier New', monospace;
+    }
+
+    /* ── Base ──────────────────────────────────────── */
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1.8;
+      cursor: crosshair;
+      overflow-x: hidden;
+    }
+
+    /* Film grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px 256px;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.5;
+    }
+
+    /* ── Typography ────────────────────────────────── */
+    h1, h2, h3 { font-family: var(--serif); font-weight: 400; }
+    h1 { font-size: clamp(2.8rem, 8vw, 5.5rem); line-height: 1.05; letter-spacing: -0.02em; }
+    h2 { font-size: clamp(1.4rem, 3vw, 2rem); letter-spacing: 0.01em; }
+    h3 { font-size: 1.1rem; }
+    p   { color: var(--silver); font-size: 0.88rem; letter-spacing: 0.03em; }
+    a   { color: inherit; text-decoration: none; }
+
+    /* ── Layout ────────────────────────────────────── */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
+
+    section { padding: 6rem 0; border-top: 1px solid var(--rule); }
+    section:first-of-type { border-top: none; }
+
+    /* ── Navigation ────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.4rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      mix-blend-mode: multiply;
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--silver);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--ink); }
+
+    /* ── Hero ──────────────────────────────────────── */
+    #hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      padding-bottom: 5rem;
+      padding-top: 8rem;
+      border-top: none;
+    }
+
+    .hero-text { padding-right: 4rem; }
+
+    .hero-eyebrow {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    .hero-name em {
+      font-style: italic;
+      color: var(--silver);
+    }
+
+    .hero-desc {
+      margin-top: 2rem;
+      max-width: 34ch;
+      font-size: 0.85rem;
+      color: var(--silver);
+      line-height: 1.9;
+    }
+
+    .hero-cta {
+      margin-top: 3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink);
+      border-bottom: 1px solid var(--ink);
+      padding-bottom: 2px;
+      transition: gap 0.3s;
+    }
+
+    .hero-cta:hover { gap: 1.4rem; }
+
+    .hero-image {
+      position: relative;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(100%) contrast(1.1);
+      transition: filter 0.6s ease;
+    }
+
+    .hero-image:hover img { filter: grayscale(80%) contrast(1.05); }
+
+    .hero-image-caption {
+      position: absolute;
+      bottom: 1rem;
+      right: 1rem;
+      font-size: 0.65rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(244,241,236,0.7);
+      writing-mode: vertical-rl;
+    }
+
+    /* Film roll corner decoration */
+    .film-corner {
+      position: absolute;
+      top: 0; left: 0;
+      width: 40px; height: 40px;
+      border-top: 3px solid var(--ink);
+      border-left: 3px solid var(--ink);
+    }
+
+    /* ── About ─────────────────────────────────────── */
+    #about .container {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .about-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+      padding-top: 0.3rem;
+    }
+
+    .about-body h2 { margin-bottom: 1.5rem; }
+
+    .about-body p {
+      font-size: 0.92rem;
+      color: var(--silver);
+      max-width: 54ch;
+      margin-bottom: 1rem;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--rule);
+    }
+
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      color: var(--ink);
+      display: block;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+      margin-top: 0.3rem;
+      display: block;
+    }
+
+    /* ── Gallery ───────────────────────────────────── */
+    #gallery .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 3rem;
+    }
+
+    .section-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto;
+      gap: 1rem;
+    }
+
+    .photo-item {
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .photo-item::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--ink);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+
+    .photo-item:hover::after { opacity: 0.12; }
+
+    .photo-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: grayscale(100%) contrast(1.08);
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .photo-item:hover img { transform: scale(1.04); }
+
+    /* Gallery layout using grid spans */
+    .photo-item:nth-child(1) { grid-column: span 7; aspect-ratio: 4/3; }
+    .photo-item:nth-child(2) { grid-column: span 5; aspect-ratio: 3/4; }
+    .photo-item:nth-child(3) { grid-column: span 4; aspect-ratio: 1/1; }
+    .photo-item:nth-child(4) { grid-column: span 4; aspect-ratio: 1/1; }
+    .photo-item:nth-child(5) { grid-column: span 4; aspect-ratio: 1/1; }
+    .photo-item:nth-child(6) { grid-column: span 5; aspect-ratio: 4/3; }
+    .photo-item:nth-child(7) { grid-column: span 7; aspect-ratio: 16/9; }
+
+    /* Placeholder photo style */
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      background: var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+      aspect-ratio: inherit;
+      filter: none !important;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(13,12,11,0.97);
+      z-index: 500;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      filter: grayscale(100%) contrast(1.1);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 1.5rem; right: 2rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+      cursor: crosshair;
+      background: none;
+      border: none;
+    }
+
+    /* ── Blog ──────────────────────────────────────── */
+    #blog .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 3rem;
+    }
+
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2.5rem;
+    }
+
+    .blog-card { border-top: 1px solid var(--rule); padding-top: 1.5rem; }
+
+    .blog-date {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--shadow);
+      margin-bottom: 0.7rem;
+      display: block;
+    }
+
+    .blog-title {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--ink);
+      margin-bottom: 0.8rem;
+      transition: color 0.2s;
+    }
+
+    .blog-card:hover .blog-title { color: var(--silver); }
+
+    .blog-excerpt {
+      font-size: 0.82rem;
+      color: var(--silver);
+      line-height: 1.8;
+      margin-bottom: 1.2rem;
+    }
+
+    .blog-read-more {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: gap 0.3s;
+    }
+
+    .blog-card:hover .blog-read-more { gap: 1rem; }
+
+    /* ── Social / Contact ──────────────────────────── */
+    #contact {
+      padding-bottom: 8rem;
+    }
+
+    #contact .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .contact-heading {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+    }
+
+    .contact-sub {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--silver);
+      max-width: 38ch;
+    }
+
+    .social-list {
+      list-style: none;
+      border-top: 1px solid var(--rule);
+      margin-top: 1.5rem;
+    }
+
+    .social-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.1rem 0;
+      border-bottom: 1px solid var(--rule);
+      transition: padding-left 0.3s;
+    }
+
+    .social-item:hover { padding-left: 0.5rem; }
+
+    .social-name {
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+
+    .social-handle {
+      font-size: 0.85rem;
+      color: var(--silver);
+      font-style: italic;
+      font-family: var(--serif);
+    }
+
+    .social-arrow { color: var(--shadow); font-size: 0.8rem; }
+
+    .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .form-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--silver);
+    }
+
+    .form-input, .form-textarea {
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--rule);
+      padding: 0.6rem 0;
+      font-family: var(--mono);
+      font-size: 0.88rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+
+    .form-input:focus, .form-textarea:focus { border-bottom-color: var(--ink); }
+
+    .form-input::placeholder, .form-textarea::placeholder { color: var(--shadow); }
+
+    .form-submit {
+      margin-top: 0.5rem;
+      background: var(--ink);
+      color: var(--paper);
+      border: none;
+      padding: 0.9rem 2rem;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: crosshair;
+      align-self: flex-start;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .form-submit:hover { background: var(--silver); }
+
+    /* ── Footer ────────────────────────────────────── */
+    footer {
+      padding: 2rem;
+      border-top: 1px solid var(--rule);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-size: 0.65rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--shadow);
+    }
+
+    .footer-film {
+      display: flex;
+      gap: 3px;
+      align-items: center;
+    }
+
+    .film-frame {
+      width: 10px;
+      height: 14px;
+      border: 1px solid var(--rule);
+    }
+
+    .film-frame.exposed { background: var(--shadow); }
+
+    /* ── Responsive ────────────────────────────────── */
+    @media (max-width: 768px) {
+      #hero { grid-template-columns: 1fr; }
+      .hero-text { padding-right: 0; margin-bottom: 2rem; }
+      #about .container { grid-template-columns: 1fr; gap: 2rem; }
+      .blog-grid { grid-template-columns: 1fr; }
+      #contact .container { grid-template-columns: 1fr; gap: 3rem; }
+      .gallery-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .photo-item:nth-child(n) { grid-column: span 1; aspect-ratio: 1/1; }
+      .photo-item:nth-child(1) { grid-column: span 2; }
+      nav { padding: 1rem 1.2rem; }
+      .nav-links { gap: 1rem; }
+    }
+
+    /* ── Scroll animation ──────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(22px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <span class="nav-logo"><!-- YOUR NAME --></span>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#blog">Blog</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section id="hero">
+    <div class="container" style="display:contents;">
+      <div class="hero-text container-pad" style="padding-left:2rem; padding-right:2rem;">
+        <span class="hero-eyebrow">Engineer &middot; Builder &middot; Explorer</span>
+        <h1 class="hero-name">
+          Eshan<br>
+          <em>Jacob</em><br>
+        
+        </h1>
+        <p class="hero-desc">
+          Brief one-liner about who you are, what you do, and what drives you.
+          Keep it short — one or two sentences at most.
+        </p>
+        <a href="#gallery" class="hero-cta">View Work &rarr;</a>
+      </div>
+
+      <div class="hero-image" style="margin-right:2rem;">
+        <div class="film-corner"></div>
+        <!-- Replace src with your actual photo -->
+        <img src="images/hero.jpg" alt="hero" />
+        <span class="hero-image-caption">35mm · 2024</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="container reveal">
+      <div class="about-label">About</div>
+      <div class="about-body">
+        <h2>A little about me.</h2>
+        <p>
+          Write a short paragraph about yourself — your background, what you study or work on,
+          and what excites you. This is your chance to let your voice come through.
+        </p>
+        <p>
+          Add a second paragraph if needed — projects you've worked on, skills you've built,
+          or a philosophy that guides your work.
+        </p>
+        <div class="about-stats">
+          <div>
+            <span class="stat-num">12</span>
+            <span class="stat-label">Projects</span>
+          </div>
+          <div>
+            <span class="stat-num">3</span>
+            <span class="stat-label">Years</span>
+          </div>
+          <div>
+            <span class="stat-num">5</span>
+            <span class="stat-label">Talks</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Gallery</h2>
+        <span class="section-label">Photography &amp; Work</span>
+      </div>
+
+      <div class="gallery-grid">
+
+  <div class="photo-item" onclick="openLightbox(this)">
+    <img src="images/g1.jpg" alt="Project 1" />
+  </div>
+
+  <div class="photo-item" onclick="openLightbox(this)">
+    <img src="images/g2.jpg" alt="Project 2" />
+  </div>
+
+  <div class="photo-item" onclick="openLightbox(this)">
+    <img src="images/g3.jpg" alt="Project 3" />
+  </div>
+
+  <div class="photo-item" onclick="openLightbox(this)">
+    <img src="images/g4.jpg" alt="Project 4" />
+  </div>
+
+  <div class="photo-item" onclick="openLightbox(this)">
+    <img src="images/g5.jpg" alt="Project 5" />
+  </div>
+
+  <div class="photo-item" onclick="openLightbox(this)">
+    <img src="images/g6.jpg" alt="Project 6" />
+  </div>
+
+  <div class="photo-item" onclick="openLightbox(this)">
+    <img src="images/g7.jpg" alt="Project 7" />
+  </div>
+
+</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <button class="lightbox-close" onclick="closeLightbox()">Close &times;</button>
+    <img id="lightbox-img" src="" alt="Full size photo" />
+  </div>
+
+  <!-- Blog -->
+  <section id="blog">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2>Writing</h2>
+        <span class="section-label">Notes &amp; Thoughts</span>
+      </div>
+
+      <div class="blog-grid">
+        <!-- Blog post 1 — replace with your actual posts -->
+        <div class="blog-card reveal">
+          <span class="blog-date">01 Mar 2025</span>
+          <h3 class="blog-title">Building a Compliant Search and Rescue Rover</h3>
+          <p class="blog-excerpt">
+            A deep dive into the mechanical design decisions behind the rover —
+            why compliant mechanisms beat rigid structures in uncertain terrain.
+          </p>
+          <a href="#" class="blog-read-more">Read &rarr;</a>
+        </div>
+
+        <!-- Blog post 2 -->
+        <div class="blog-card reveal">
+          <span class="blog-date">14 Feb 2025</span>
+          <h3 class="blog-title">ESP32 Live Camera Streaming over Wi-Fi</h3>
+          <p class="blog-excerpt">
+            Notes on getting MJPEG streaming working reliably on an ESP32-CAM —
+            PSRAM tricks, frame buffer tuning, and firmware pitfalls.
+          </p>
+          <a href="#" class="blog-read-more">Read &rarr;</a>
+        </div>
+
+        <!-- Blog post 3 -->
+        <div class="blog-card reveal">
+          <span class="blog-date">05 Jan 2025</span>
+          <h3 class="blog-title">On Design Philosophy: Learning from Nature</h3>
+          <p class="blog-excerpt">
+            Reflections on Japanese wabi-sabi and what it taught me about
+            building things that are honest, minimal, and made to last.
+          </p>
+          <a href="#" class="blog-read-more">Read &rarr;</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact / Social -->
+  <section id="contact">
+    <div class="container">
+      <div class="reveal">
+        <span class="section-label">Find Me</span>
+        <h2 class="contact-heading" style="margin-top:0.8rem;">
+          Let's Connect.
+        </h2>
+        <p class="contact-sub">
+          Open to collaborations, project discussions, and interesting conversations.
+        </p>
+
+        <!-- Social Links — replace handles with your own -->
+        <ul class="social-list">
+          <li class="social-item">
+            <span class="social-name">GitHub</span>
+            <a href="https://github.com/yourusername" target="_blank" class="social-handle">@yourusername</a>
+            <span class="social-arrow">&rarr;</span>
+          </li>
+          <li class="social-item">
+            <span class="social-name">LinkedIn</span>
+            <a href="https://linkedin.com/in/yourprofile" target="_blank" class="social-handle">yourprofile</a>
+            <span class="social-arrow">&rarr;</span>
+          </li>
+          <li class="social-item">
+            <span class="social-name">Instagram</span>
+            <a href="https://instagram.com/yourhandle" target="_blank" class="social-handle">@yourhandle</a>
+            <span class="social-arrow">&rarr;</span>
+          </li>
+          <li class="social-item">
+            <span class="social-name">Twitter / X</span>
+            <a href="https://x.com/yourhandle" target="_blank" class="social-handle">@yourhandle</a>
+            <span class="social-arrow">&rarr;</span>
+          </li>
+          <li class="social-item">
+            <span class="social-name">Email</span>
+            <a href="mailto:you@email.com" class="social-handle">you@email.com</a>
+            <span class="social-arrow">&rarr;</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Contact form -->
+      <div class="reveal">
+        <span class="section-label" style="display:block;margin-bottom:2rem;">Send a Message</span>
+        <form class="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <!-- Sign up free at formspree.io, get your form ID, paste above -->
+          <div class="form-group">
+            <label class="form-label" for="name">Name</label>
+            <input class="form-input" id="name" name="name" type="text" placeholder="Your name" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input class="form-input" id="email" name="email" type="email" placeholder="your@email.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="message">Message</label>
+            <textarea class="form-textarea" id="message" name="message" rows="5" placeholder="What's on your mind?" required></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Message &rarr;</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <span class="footer-copy">&copy; 2025 Your Name &mdash; All frames reserved.</span>
+    <div class="footer-film">
+      <div class="film-frame exposed"></div>
+      <div class="film-frame exposed"></div>
+      <div class="film-frame exposed"></div>
+      <div class="film-frame"></div>
+      <div class="film-frame"></div>
+    </div>
+  </footer>
+
+  <script>
+    // Lightbox
+    function openLightbox(el) {
+      const src = el.querySelector('img').src;
+      document.getElementById('lightbox-img').src = src;
+      document.getElementById('lightbox').classList.add('open');
+    }
+    function closeLightbox() {
+      document.getElementById('lightbox').classList.remove('open');
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+    // Scroll reveal
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    reveals.forEach(r => observer.observe(r));
+  </script>
+</body>
+</html>
